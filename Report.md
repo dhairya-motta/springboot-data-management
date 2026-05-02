@@ -33,7 +33,10 @@ The database schema is automatically generated using `spring.jpa.hibernate.ddl-a
 ### Create Operation
 - **Code implementation**: Handled in `BookController.java` inside the `showAddForm()` and `addBook()` methods.
 - UI forms bind to a new `Book` Model object.
-- Exception handling intercepts `DataIntegrityViolationException` to warn if missing fields/associations exist, using `RedirectAttributes` flash messages.
+- Exception handling intercepts `DataIntegrityViolationException` to warn if missing fields/associations exist.
+
+**Screenshot of Create Operation:**
+![Add Book Interface](screenshot_add.png)
 
 ### Read Operation (Custom Outer/Inner Join Map)
 - **Code implementation**: We utilized the `BookRepository` interface by adding:
@@ -43,9 +46,15 @@ The database schema is automatically generated using `spring.jpa.hibernate.ddl-a
   ```
 - This optimizes data fetching (resolves N+1 issues) by inner-joining the Author mapping explicitly. Data is then fed to `book-list.jsp` using standard `c:forEach` tags in JSTL.
 
+**Screenshot of Read Operation Interface:**
+![List Books Interface](screenshot_list.png)
+
 ### Update Operation
 - **Code implementation**: Realized via `showUpdateForm()` mapping and `updateBook()`.
 - Fetches the existing Book by ID, and if valid, returns the `book-form.jsp` pre-filled. Changes made map over the retrieved Entity instance, committing via `libraryService.updateBook()`.
+
+**Screenshot of Update Operation Interface:**
+![Update Book Interface](screenshot_edit.png)
 
 ## 4. Challenges Faced and How We Overcame Them
 - **Challenge 1:** *JSP View Resolution with Spring Boot 3+.* Modern Spring Boot leans toward Thymeleaf over JSP. 

@@ -10,6 +10,7 @@
         code { background: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
         pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
         a { color: #0066cc; }
+        img { max-width: 100%; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin: 15px 0; }
     </style>
 </head>
 <body>
@@ -47,8 +48,10 @@
 <ul>
 <li><strong>Code implementation</strong>: Handled in <code>BookController.java</code> inside the <code>showAddForm()</code> and <code>addBook()</code> methods.</li>
 <li>UI forms bind to a new <code>Book</code> Model object.</li>
-<li>Exception handling intercepts <code>DataIntegrityViolationException</code> to warn if missing fields/associations exist, using <code>RedirectAttributes</code> flash messages.</li>
+<li>Exception handling intercepts <code>DataIntegrityViolationException</code> to warn if missing fields/associations exist.</li>
 </ul>
+<p><strong>Screenshot of Create Operation:</strong>
+<img alt="Add Book Interface" src="screenshot_add.png" /></p>
 <h3>Read Operation (Custom Outer/Inner Join Map)</h3>
 <ul>
 <li><strong>Code implementation</strong>: We utilized the <code>BookRepository</code> interface by adding:
@@ -57,11 +60,15 @@
   List&lt;Book&gt; findAllBooksWithAuthors();</code></li>
 <li>This optimizes data fetching (resolves N+1 issues) by inner-joining the Author mapping explicitly. Data is then fed to <code>book-list.jsp</code> using standard <code>c:forEach</code> tags in JSTL.</li>
 </ul>
+<p><strong>Screenshot of Read Operation Interface:</strong>
+<img alt="List Books Interface" src="screenshot_list.png" /></p>
 <h3>Update Operation</h3>
 <ul>
 <li><strong>Code implementation</strong>: Realized via <code>showUpdateForm()</code> mapping and <code>updateBook()</code>.</li>
 <li>Fetches the existing Book by ID, and if valid, returns the <code>book-form.jsp</code> pre-filled. Changes made map over the retrieved Entity instance, committing via <code>libraryService.updateBook()</code>.</li>
 </ul>
+<p><strong>Screenshot of Update Operation Interface:</strong>
+<img alt="Update Book Interface" src="screenshot_edit.png" /></p>
 <h2>4. Challenges Faced and How We Overcame Them</h2>
 <ul>
 <li>
