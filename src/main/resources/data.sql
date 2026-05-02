@@ -1,0 +1,21 @@
+INSERT INTO author (name, nationality) VALUES ('J.K. Rowling', 'British');
+INSERT INTO author (name, nationality) VALUES ('George R.R. Martin', 'American');
+INSERT INTO author (name, nationality) VALUES ('J.R.R. Tolkien', 'British');
+INSERT INTO author (name, nationality) VALUES ('Stephen King', 'American');
+INSERT INTO author (name, nationality) VALUES ('Agatha Christie', 'British');
+INSERT INTO author (name, nationality) VALUES ('Isaac Asimov', 'Russian-American');
+INSERT INTO author (name, nationality) VALUES ('Arthur C. Clarke', 'British');
+INSERT INTO author (name, nationality) VALUES ('F. Scott Fitzgerald', 'American');
+INSERT INTO author (name, nationality) VALUES ('Jane Austen', 'British');
+INSERT INTO author (name, nationality) VALUES ('Mark Twain', 'American');
+
+INSERT INTO book (title, publication_year, author_id) VALUES ('Harry Potter and the Sorcerer''s Stone', 1997, 1);
+INSERT INTO book (title, publication_year, author_id) VALUES ('A Game of Thrones', 1996, 2);
+INSERT INTO book (title, publication_year, author_id) VALUES ('The Fellowship of the Ring', 1954, 3);
+INSERT INTO book (title, publication_year, author_id) VALUES ('The Shining', 1977, 4);
+INSERT INTO book (title, publication_year, author_id) VALUES ('Murder on the Orient Express', 1934, 5);
+INSERT INTO book (title, publication_year, author_id) VALUES ('Foundation', 1951, 6);
+INSERT INTO book (title, publication_year, author_id) VALUES ('2001: A Space Odyssey', 1968, 7);
+INSERT INTO book (title, publication_year, author_id) VALUES ('The Great Gatsby', 1925, 8);
+INSERT INTO book (title, publication_year, author_id) VALUES ('Pride and Prejudice', 1813, 9);
+INSERT INTO book (title, publication_year, author_id) VALUES ('The Adventures of Tom Sawyer', 1876, 10);
