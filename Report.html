@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; }
+        h1, h2, h3 { color: #333; }
+        code { background: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        a { color: #0066cc; }
+    </style>
+</head>
+<body>
+<h1>Spring Boot Data Management Application</h1>
+<h2>1. Approach</h2>
+<p>The objective of this project is to build a Spring Boot MVC application to manage two related entities: <code>Author</code> and <code>Book</code>. We chose a <strong>One-to-Many relationship</strong>, where one Author can write multiple Books, but a Book is associated with only one Author.</p>
+<p>The project follows a standard layered architecture:
+- <strong>Model (Entity Layer):</strong> Contains <code>Author</code> and <code>Book</code> entities mapped to the database using JPA annotations.
+- <strong>Repository (Data Access Layer):</strong> Extends <code>JpaRepository</code> for basic CRUD and includes a custom <code>@Query</code> for fetching Book details alongside Author data.
+- <strong>Service Layer:</strong> Connects the Controller and the Repository, handling business logic like finding and updating records.
+- <strong>Controller Layer:</strong> A standard MVC <code>@Controller</code> handles HTTP GET and POST requests, managing data flow between models and JSP pages.
+- <strong>View Layer:</strong> JavaServer Pages (JSP) coupled with JSTL rendering the User Interface.</p>
+<h2>2. Entity Relationship Design (ER Design)</h2>
+<ul>
+<li><strong>Author Entity:</strong></li>
+<li><code>id</code> (Primary Key, Auto-increment)</li>
+<li><code>name</code> (String, Non-null)</li>
+<li><code>nationality</code> (String)</li>
+<li>
+<p><code>books</code> (List of Book, mapped by author)</p>
+</li>
+<li>
+<p><strong>Book Entity:</strong></p>
+</li>
+<li><code>id</code> (Primary Key, Auto-increment)</li>
+<li><code>title</code> (String, Non-null)</li>
+<li><code>publicationYear</code> (Integer)</li>
+<li><code>author_id</code> (Foreign Key linked to Author ID)</li>
+</ul>
+<p>Both entities are related via <code>@OneToMany</code> and <code>@ManyToOne</code> annotations, ensuring foreign key constraints in the underlying H2 embedded database.</p>
+<h2>3. Implementation Details for Operations</h2>
+<h3>Populate Database</h3>
+<p>The database schema is automatically generated using <code>spring.jpa.hibernate.ddl-auto=update</code>. We populated it using a <code>data.sql</code> file that executes automatically after DDL scripts run. We included 10 row inserts for <code>Author</code> and 10 for <code>Book</code>.</p>
+<h3>Create Operation</h3>
+<ul>
+<li><strong>Code implementation</strong>: Handled in <code>BookController.java</code> inside the <code>showAddForm()</code> and <code>addBook()</code> methods.</li>
+<li>UI forms bind to a new <code>Book</code> Model object.</li>
+<li>Exception handling intercepts <code>DataIntegrityViolationException</code> to warn if missing fields/associations exist, using <code>RedirectAttributes</code> flash messages.</li>
+</ul>
+<h3>Read Operation (Custom Outer/Inner Join Map)</h3>
+<ul>
+<li><strong>Code implementation</strong>: We utilized the <code>BookRepository</code> interface by adding:
+  <code>java
+  @Query("SELECT b FROM Book b JOIN FETCH b.author")
+  List&lt;Book&gt; findAllBooksWithAuthors();</code></li>
+<li>This optimizes data fetching (resolves N+1 issues) by inner-joining the Author mapping explicitly. Data is then fed to <code>book-list.jsp</code> using standard <code>c:forEach</code> tags in JSTL.</li>
+</ul>
+<h3>Update Operation</h3>
+<ul>
+<li><strong>Code implementation</strong>: Realized via <code>showUpdateForm()</code> mapping and <code>updateBook()</code>.</li>
+<li>Fetches the existing Book by ID, and if valid, returns the <code>book-form.jsp</code> pre-filled. Changes made map over the retrieved Entity instance, committing via <code>libraryService.updateBook()</code>.</li>
+</ul>
+<h2>4. Challenges Faced and How We Overcame Them</h2>
+<ul>
+<li>
+<p><strong>Challenge 1:</strong> <em>JSP View Resolution with Spring Boot 3+.</em> Modern Spring Boot leans toward Thymeleaf over JSP. 
+  <strong>Solution:</strong> We mapped Tomcat embed Jasper (<code>tomcat-embed-jasper</code>) and explicit JSTL dependencies inside the <code>pom.xml</code> while ensuring correct <code>spring.mvc.view.prefix</code> definitions.</p>
+</li>
+<li>
+<p><strong>Challenge 2:</strong> <em>N+1 Query Issue when listing Books.</em> Iterating over Books and accessing <code>book.author.name</code> would cause multiple supplementary queries in the JSP layer.
+  <strong>Solution:</strong> Used the requested <code>JOIN FETCH b.author</code> inner-join logic inside <code>BookRepository</code> to eagerly load dependent author rows in a single query.</p>
+</li>
+<li>
+<p><strong>Challenge 3:</strong> <em>data.sql running prematurely.</em> Spring Boot 2.5+ runs data initialization before JPA DDL by default.
+  <strong>Solution:</strong> Updated <code>application.properties</code> with <code>spring.jpa.defer-datasource-initialization=true</code> resolving any Table-Not-Found exceptions during boot up.</p>
+</li>
+</ul>
+<h2>5. Github URL</h2>
+<p>The project has been committed to the existing Repository path:
+<a href="https://github.com/dhairya-motta/springboot-data-management">https://github.com/dhairya-motta/springboot-data-management</a></p>
+</body>
+</html>
